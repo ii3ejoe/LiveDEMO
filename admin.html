@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Iowa Neighbor V4.2.5.8-LiveDemo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="version.js" defer></script>
+  <style>
+    body { background: #f1f5f9; font-family: Inter, system-ui, sans-serif; margin: 0; }
+    .admin-wrap { max-width: 720px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; }
+    .admin-lock, .admin-panel {
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+      padding: 1.75rem 1.75rem 1.5rem; box-shadow: 0 10px 30px rgba(15,23,42,.07);
+    }
+    .admin-lock { max-width: 400px; margin: 4rem auto; }
+    .admin-lock h1 { font-size: 1.35rem; margin: 0 0 0.5rem; color: #0f172a; }
+    .admin-lock p { color: #64748b; font-size: 0.9rem; margin: 0 0 1rem; }
+    .admin-field { margin-bottom: 0.95rem; }
+    .admin-field label {
+      display: block; font-size: 0.8rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem;
+    }
+    .admin-lock input, .admin-panel input, .admin-panel textarea, .admin-panel select {
+      width: 100%; box-sizing: border-box; padding: 0.65rem 0.8rem;
+      border: 1.5px solid #e2e8f0; border-radius: 10px; font: inherit; background: #fff;
+    }
+    .admin-lock input:focus, .admin-panel input:focus, .admin-panel textarea:focus {
+      outline: none; border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,.15);
+    }
+    .admin-tabs {
+      display: flex; gap: 0.4rem; margin-bottom: 1.35rem; flex-wrap: wrap;
+      background: #f1f5f9; padding: 0.3rem; border-radius: 999px; width: fit-content;
+    }
+    .admin-tabs button {
+      border: none; background: transparent; border-radius: 999px;
+      padding: 0.45rem 1.05rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; color: #64748b;
+    }
+    .admin-tabs button.active { background: #0d9488; color: #fff; box-shadow: 0 1px 3px rgba(13,148,136,.35); }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .admin-section h2 { font-size: 1.25rem; margin: 0 0 0.4rem; color: #0f172a; }
+    .admin-section .lede { color: #64748b; font-size: 0.875rem; margin: 0 0 1.15rem; }
+    .admin-actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 1rem 0 0.5rem; }
+    .admin-actions .btn, .admin-lock .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
+      padding: 0.6rem 1.1rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+      border: none; cursor: pointer; text-decoration: none;
+    }
+    .btn-primary, .admin-actions .btn-primary { background: #0d9488; color: #fff; }
+    .btn-primary:hover { background: #0f766e; }
+    .btn-outline, .admin-actions .btn-outline {
+      background: #fff; color: #0d9488; border: 1.5px solid #0d9488 !important;
+    }
+    .resource-row { border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.75rem; margin-bottom: 0.5rem; font-size: 0.875rem; }
+    .resource-row strong { display: block; margin-bottom: 0.25rem; }
+    .muted { color: #64748b; font-size: 0.8rem; }
+    .status-ok { color: #0d9488; font-weight: 600; }
+    .status-err { color: #dc2626; font-weight: 600; }
+    #admin-bar {
+      background: #0f172a; color: #fff; padding: 0.65rem 1.25rem; font-size: 0.85rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    #admin-bar a { color: #99f6e4; text-decoration: none; font-weight: 500; }
+    #admin-bar a:hover { text-decoration: underline; }
+    /* Help tab */
+    .help-list { list-style: none; padding: 0; margin: 0 0 1.25rem; }
+    .help-list li {
+      display: flex; gap: 0.85rem; align-items: flex-start;
+      padding: 0.85rem 0; border-bottom: 1px solid #f1f5f9; color: #334155; font-size: 0.95rem; line-height: 1.45;
+    }
+    .help-list li:last-child { border-bottom: none; }
+    .help-num {
+      flex: 0 0 1.75rem; width: 1.75rem; height: 1.75rem; border-radius: 999px;
+      background: #0d9488; color: #fff; font-weight: 700; font-size: 0.8rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .help-foot {
+      margin-top: 0.5rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;
+      color: #64748b; font-size: 0.85rem; display: flex; gap: 0.4rem; align-items: center;
+    }
+    #resources-json {
+      width: 100%; box-sizing: border-box; border: 1.5px solid #e2e8f0; border-radius: 12px;
+      padding: 0.85rem; background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+  <!-- Not linked from the public site. -->
+  <div id="admin-bar">
+    <span>Iowa Neighbor V4.2.5.8-LiveDemo · Admin (hidden from public nav)</span>
+    <a href="index.html">Public site ↗</a>
+  </div>
+
+  <div class="admin-wrap">
+    <div id="lock-screen" class="admin-lock">
+      <h1>Admin sign-in</h1>
+      <p>Enter your admin password to continue.</p>
+      <input type="password" id="admin-password" placeholder="Admin password" autocomplete="current-password" />
+      <button type="button" class="btn btn-primary" id="btn-unlock" style="width:100%">Unlock</button>
+      <p id="lock-msg" class="muted"></p>
+    </div>
+
+    <div id="admin-app" class="admin-panel" hidden>
+      <div class="admin-tabs">
+        <button type="button" class="active" data-tab="resources">Resources</button>
+        <button type="button" data-tab="settings">Settings</button>
+        <button type="button" data-tab="help">Help</button>
+      </div>
+
+      <section id="tab-resources" class="admin-section active">
+        <h2>Resource list (manual update)</h2>
+        <p class="muted">Edit the JSON below, then click Save. This updates the local <code>data/resources.json</code> file when the admin API is available, or downloads a file you can copy into place.</p>
+        <div class="admin-actions">
+          <button type="button" class="btn btn-primary" id="btn-reload">Reload from disk</button>
+          <button type="button" class="btn btn-primary" id="btn-save">Save resources</button>
+          <button type="button" class="btn btn-outline" id="btn-download">Download JSON</button>
+        </div>
+        <p id="res-status" class="muted"></p>
+        <textarea id="resources-json" rows="18" spellcheck="false" style="font-family: ui-monospace, monospace; font-size: 0.8rem;"></textarea>
+        <h3 style="margin-top:1rem;font-size:1rem;">Quick list</h3>
+        <div id="resource-list"></div>
+      </section>
+
+      <section id="tab-settings" class="admin-section">
+        <h2>Site settings</h2>
+        <p class="lede">These settings are stored in your browser and saved to data/settings.json.</p>
+        <div class="admin-field">
+          <label for="set-brand">Site brand name</label>
+          <input id="set-brand" value="Iowa Neighbor" />
+        </div>
+        <div class="admin-field">
+          <label for="set-location">Default location</label>
+          <input id="set-location" value="Des Moines, IA (50309)" />
+        </div>
+        <div class="admin-field">
+          <label for="set-state">Active state code</label>
+          <input id="set-state" value="IA" maxlength="2" />
+        </div>
+        <div class="admin-field">
+          <label for="set-paypal">PayPal.me username</label>
+          <input id="set-paypal" value="iD10T" />
+        </div>
+        <div class="admin-field">
+          <label for="set-cashapp">Cash App cashtag</label>
+          <input id="set-cashapp" value="iD10T" />
+        </div>
+        <div class="admin-field">
+          <label for="set-email">Public contact email</label>
+          <input id="set-email" type="email" placeholder="you@example.com" />
+        </div>
+        <div class="admin-field">
+          <label for="set-notes">Notes for maintainers</label>
+          <textarea id="set-notes" rows="3" placeholder="Add notes for other maintainers…"></textarea>
+        </div>
+        <div class="admin-actions">
+          <button type="button" class="btn btn-primary" id="btn-save-settings">Save settings</button>
+        </div>
+        <p id="set-status" class="muted"></p>
+      </section>
+
+      <section id="tab-help" class="admin-section">
+        <h2>How to use this page</h2>
+        <ol class="help-list">
+          <li><span class="help-num">1</span><span><strong>On Resources</strong> edit the list or paste updated JSON then Save.</span></li>
+          <li><span class="help-num">2</span><span><strong>On Settings</strong> update brand, donation accounts, and default location.</span></li>
+          <li><span class="help-num">3</span><span><strong>Use Download JSON</strong> if you need a backup copy of the resource list.</span></li>
+          <li><span class="help-num">4</span><span>This page is not linked from the public menu.</span></li>
+        </ol>
+        <p class="help-foot">ℹ Maintainer guides are in the project docs folder.</p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var TOKEN_KEY = 'in_admin_token';
+      var SETTINGS_KEY = 'in_admin_settings';
+
+      function $(id) { return document.getElementById(id); }
+
+      function getPassword() {
+        return ($('admin-password').value || '').trim() || 'neighbor';
+      }
+
+      async function api(path, opts) {
+        opts = opts || {};
+        opts.headers = Object.assign({ 'Content-Type': 'application/json', 'X-Admin-Password': sessionStorage.getItem(TOKEN_KEY) || getPassword() }, opts.headers || {});
+        var res = await fetch(path, opts);
+        return res;
+      }
+
+      function unlock() {
+        var pw = getPassword();
+        sessionStorage.setItem(TOKEN_KEY, pw);
+        // Try API; if offline static host, still allow local edit + download
+        api('/api/admin/ping').then(function (res) {
+          if (res.ok || res.status === 404) {
+            $('lock-screen').hidden = true;
+            $('admin-app').hidden = false;
+            loadResources();
+            loadSettings();
+          } else if (res.status === 401) {
+            $('lock-msg').textContent = 'Wrong password (server rejected it).';
+            $('lock-msg').className = 'status-err';
+          } else {
+            $('lock-screen').hidden = true;
+            $('admin-app').hidden = false;
+            loadResources();
+            loadSettings();
+          }
+        }).catch(function () {
+          $('lock-screen').hidden = true;
+          $('admin-app').hidden = false;
+          loadResources();
+          loadSettings();
+          $('lock-msg').textContent = '';
+        });
+      }
+
+      $('btn-unlock').addEventListener('click', unlock);
+      $('admin-password').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') unlock();
+      });
+
+      document.querySelectorAll('.admin-tabs button').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.admin-tabs button').forEach(function (b) { b.classList.remove('active'); });
+          document.querySelectorAll('.admin-section').forEach(function (s) { s.classList.remove('active'); });
+          btn.classList.add('active');
+          $('tab-' + btn.dataset.tab).classList.add('active');
+        });
+      });
+
+      function renderList(arr) {
+        var box = $('resource-list');
+        if (!Array.isArray(arr)) { box.innerHTML = '<p class="status-err">JSON must be an array of resources.</p>'; return; }
+        box.innerHTML = arr.map(function (r, i) {
+          return '<div class="resource-row"><strong>' + (i + 1) + '. ' + (r.name || '(no name)') + '</strong>' +
+            '<span class="muted">' + (r.full_address || r.city || '') + ' · ' + (r.phone || '') + ' · conf ' + (r.evidence_confidence || '?') + '%</span></div>';
+        }).join('');
+      }
+
+      async function loadResources() {
+        $('res-status').textContent = 'Loading…';
+        try {
+          var res = await fetch('../data/resources.json', { cache: 'no-store' });
+          if (!res.ok) throw new Error('Could not load resources.json');
+          var data = await res.json();
+          $('resources-json').value = JSON.stringify(data, null, 2);
+          renderList(data);
+          $('res-status').textContent = 'Loaded ' + data.length + ' resources.';
+          $('res-status').className = 'status-ok';
+        } catch (e) {
+          $('res-status').textContent = String(e.message || e);
+          $('res-status').className = 'status-err';
+        }
+      }
+
+      $('btn-reload').addEventListener('click', loadResources);
+
+      $('btn-save').addEventListener('click', async function () {
+        var text = $('resources-json').value;
+        var data;
+        try { data = JSON.parse(text); } catch (e) {
+          $('res-status').textContent = 'Invalid JSON: ' + e.message;
+          $('res-status').className = 'status-err';
+          return;
+        }
+        renderList(data);
+        try {
+          var res = await api('/api/admin/resources', { method: 'POST', body: JSON.stringify(data) });
+          if (res.ok) {
+            $('res-status').textContent = 'Saved to data/resources.json on the server.';
+            $('res-status').className = 'status-ok';
+          } else {
+            throw new Error('Server save not available (status ' + res.status + '). Use Download JSON and copy the file manually.');
+          }
+        } catch (e) {
+          $('res-status').textContent = String(e.message || e);
+          $('res-status').className = 'status-err';
+        }
+      });
+
+      $('btn-download').addEventListener('click', function () {
+        var blob = new Blob([$('resources-json').value], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'resources.json';
+        a.click();
+      });
+
+      function loadSettings() {
+        var s = {};
+        try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'); } catch (e) {}
+        $('set-brand').value = s.brand || 'Iowa Neighbor';
+        $('set-location').value = s.defaultLocation || 'Des Moines, IA (50309)';
+        $('set-state').value = s.state || 'IA';
+        $('set-paypal').value = s.paypal || 'iD10T';
+        $('set-cashapp').value = s.cashapp || 'iD10T';
+        $('set-email').value = s.email || '';
+        $('set-notes').value = s.notes || '';
+      }
+
+      $('btn-save-settings').addEventListener('click', async function () {
+        var s = {
+          brand: $('set-brand').value.trim(),
+          defaultLocation: $('set-location').value.trim(),
+          state: $('set-state').value.trim().toUpperCase(),
+          paypal: $('set-paypal').value.trim(),
+          cashapp: $('set-cashapp').value.trim(),
+          email: $('set-email').value.trim(),
+          notes: $('set-notes').value.trim()
+        };
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+        try {
+          var res = await api('/api/admin/settings', { method: 'POST', body: JSON.stringify(s) });
+          if (res.ok) {
+            $('set-status').textContent = 'Settings saved to server (data/settings.json).';
+          } else {
+            $('set-status').textContent = 'Saved in this browser only (server API not available).';
+          }
+        } catch (e) {
+          $('set-status').textContent = 'Saved in this browser only.';
+        }
+        $('set-status').className = 'status-ok';
+      });
+
+      // Auto-unlock if token already set this session
+      if (sessionStorage.getItem(TOKEN_KEY)) {
+        $('lock-screen').hidden = true;
+        $('admin-app').hidden = false;
+        loadResources();
+        loadSettings();
+      }
+    })();
+  </script>
+</body>
+</html>

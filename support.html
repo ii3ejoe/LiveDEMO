@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iowa Neighbor V4.2.5.8-LiveDemo</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0d9488" />
+  <meta name="description" content="Support Iowa Neighbor — a free, open community resource directory kept on a $0 budget." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="version.js" defer></script>
+  <script src="offline.js" defer></script>
+  <script src="pwa.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <circle cx="18" cy="18" r="18" fill="#0d9488"/>
+          <path d="M12 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="14.5" cy="14.5" r="2.2" fill="#fff"/>
+          <circle cx="21.5" cy="14.5" r="2.2" fill="#fff"/>
+        </svg>
+        <div class="logo-text">
+          <span class="brand">Iowa Neighbor V4.2.5.8-LiveDemo</span><span class="version"></span>
+        </div>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#results" class="nav-link">Find Resources</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="support.html" class="nav-link active">Support</a>
+      </nav>
+      <div class="header-actions">
+        <a href="support.html" class="btn btn-primary">Get Help</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <div class="page-card support-card">
+      <h1>Support Iowa Neighbor</h1>
+      <p class="support-lead">
+        Iowa Neighbor is built from lived experience and a deep understanding of local needs.
+        We’re a free open resource directory—$0 budget, 100% volunteer-led—connecting neighbors
+        with trusted community resources. Every contribution helps us keep the work sustainable
+        and accessible for all.
+      </p>
+
+      <div class="amount-row" role="group" aria-label="Donation amount">
+        <button type="button" class="amount-btn" data-amount="1">$1</button>
+        <button type="button" class="amount-btn" data-amount="5">$5</button>
+        <button type="button" class="amount-btn selected" data-amount="10">$10</button>
+        <button type="button" class="amount-btn" data-amount="20">$20</button>
+        <button type="button" class="amount-btn" data-amount="other">Other</button>
+      </div>
+      <div class="other-amount-wrap" id="other-amount-wrap" hidden>
+        <label for="other-amount">Amount (USD)</label>
+        <input type="number" id="other-amount" min="1" step="1" placeholder="Enter amount" />
+      </div>
+
+      <div class="donate-actions">
+        <!-- PLACEHOLDER: replace iD10T with your real PayPal.me or donate link before launch -->
+        <a id="btn-paypal" class="btn btn-primary btn-donate"
+           href="https://paypal.me/iD10T/10"
+           target="_blank" rel="noopener noreferrer">
+          Donate with PayPal
+        </a>
+        <!-- PLACEHOLDER: replace iD10T with your Cash App $cashtag before launch -->
+        <a id="btn-cashapp" class="btn btn-outline btn-donate"
+           href="https://cash.app/$iD10T/10"
+           target="_blank" rel="noopener noreferrer">
+          Cash App
+        </a>
+      </div>
+
+      <p class="support-note">
+        <span class="note-icon" aria-hidden="true">✓</span>
+        Payment account placeholder: <strong>iD10T</strong> — update before launch
+        (PayPal.me / Cash App $cashtag).
+      </p>
+      <p class="support-about-link">
+        <a href="about.html">Read the full story on the About page →</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand">Iowa Neighbor</span>
+      </div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="support.html">Support</a>
+        <a href="index.html">Home</a>
+      </div>
+      <p class="footer-note">Built with free &amp; open-source tools · Map data © OpenStreetMap contributors</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // TODO: replace placeholders when accounts are live
+      var PAYPAL_USER = "iD10T";
+      var CASHAPP_TAG = "iD10T";
+      var amount = 10;
+
+      var buttons = document.querySelectorAll(".amount-btn");
+      var otherWrap = document.getElementById("other-amount-wrap");
+      var otherInput = document.getElementById("other-amount");
+      var btnPaypal = document.getElementById("btn-paypal");
+      var btnCash = document.getElementById("btn-cashapp");
+
+      function syncLinks() {
+        var a = amount > 0 ? amount : 10;
+        btnPaypal.href = "https://paypal.me/" + PAYPAL_USER + "/" + a;
+        btnCash.href = "https://cash.app/$" + CASHAPP_TAG + "/" + a;
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          buttons.forEach(function (b) { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+          var v = btn.getAttribute("data-amount");
+          if (v === "other") {
+            otherWrap.hidden = false;
+            amount = parseInt(otherInput.value, 10) || 0;
+          } else {
+            otherWrap.hidden = true;
+            amount = parseInt(v, 10);
+          }
+          syncLinks();
+        });
+      });
+      otherInput.addEventListener("input", function () {
+        amount = parseInt(otherInput.value, 10) || 0;
+        syncLinks();
+      });
+      syncLinks();
+    })();
+  </script>
+</body>
+</html>

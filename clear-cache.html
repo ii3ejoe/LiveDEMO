@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clearing Iowa Neighbor cache…</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 32rem; margin: 3rem auto; padding: 0 1rem; color: #0f172a; }
+    h1 { font-size: 1.25rem; color: #0d9488; }
+  </style>
+</head>
+<body>
+  <h1>Clearing Iowa Neighbor cache for this address only</h1>
+  <p>This removes service workers and caches for <strong>this site only</strong> (this IP and port). Other websites are not touched.</p>
+  <p id="status">Working…</p>
+  <script>
+    (async function () {
+      const status = document.getElementById('status');
+      let sw = 0, c = 0;
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          // Only unregister workers that control this origin (all registrations here are this origin)
+          await Promise.all(regs.map(r => r.unregister()));
+          sw = regs.length;
+        }
+        if (window.caches) {
+          const keys = await caches.keys();
+          // Cache API keys are per-origin; deleting them only affects this origin
+          await Promise.all(keys.map(k => caches.delete(k)));
+          c = keys.length;
+        }
+        // Only Iowa Neighbor offline keys — not all of localStorage
+        try {
+          const keep = [];
+          for (let i = 0; i < localStorage.length; i++) keep.push(localStorage.key(i));
+          keep.forEach(function (k) {
+            if (!k) return;
+            if (k === 'in_offline_bundle' || k.indexOf('iowa_neighbor') === 0 || k.indexOf('in_offline') === 0) {
+              localStorage.removeItem(k);
+            }
+          });
+        } catch (e) {}
+        status.innerHTML = 'Done for this site only. Removed ' + sw + ' service worker(s) and ' + c + ' cache(s).<br>Opening Iowa Neighbor…';
+      } catch (e) {
+        status.textContent = 'Partial clear: ' + e;
+      }
+      setTimeout(function () {
+        location.replace('./index.html?v=4.2.5.8-LiveDemo&t=' + Date.now());
+      }, 700);
+    })();
+  </script>
+</body>
+</html>
