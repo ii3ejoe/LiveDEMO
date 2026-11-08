@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feedback — Iowa Neighbor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="version.js" defer></script>
+  <style>
+    .fb-wrap { max-width: 560px; margin: 2rem auto; padding: 0 1rem 3rem; }
+    .fb-card { padding: 1.25rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; }
+    .fb-field { margin-bottom: 0.9rem; }
+    .fb-field label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.35rem; color: #334155; }
+    .fb-field input, .fb-field select, .fb-field textarea {
+      width: 100%; box-sizing: border-box; padding: 0.65rem 0.8rem;
+      border-radius: 10px; border: 1.5px solid #e2e8f0; font: inherit; background: #fff;
+    }
+    .fb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    @media (max-width: 520px) { .fb-row { grid-template-columns: 1fr; } }
+    .fb-hint { font-size: 0.8rem; color: #94a3b8; margin-top: 1rem; }
+    .fb-alt { margin-top: 1rem; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark" aria-hidden="true">IN</span>
+        <span class="logo-text"><span class="brand">Iowa Neighbor</span></span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="support.html" class="nav-link">Support</a>
+        <a href="share-resource.html" class="nav-link">Share a Resource</a>
+      </nav>
+    </div>
+  </header>
+  <main class="fb-wrap">
+    <h1 style="font-size:1.5rem;margin:0 0 0.5rem">Feedback</h1>
+    <p style="color:#64748b;margin:0 0 1.25rem">Questions, corrections, or general comments. Not for emergencies — call 988 for crisis support.</p>
+    <p class="fb-alt">Want to suggest a pantry, shelter, or program? Use <a href="share-resource.html" style="color:#0d9488;font-weight:600">Share a Resource</a> instead.</p>
+    <form class="fb-card" action="https://formsubmit.co/outofmemorysolutions@gmail.com" method="POST" id="feedback-form">
+      <input type="hidden" name="_subject" id="fs-subject" value="Iowa Neighbor - Feedback" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_next" id="fs-next" value="" />
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+      <div class="fb-field">
+        <label for="fb-subject-select">Subject</label>
+        <select id="fb-subject-select">
+          <option value="">Select a subject…</option>
+          <option value="Question">Question</option>
+          <option value="Correction">Correction (wrong info)</option>
+          <option value="General feedback">General feedback</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="fb-field">
+        <label for="fb-subject-edit">Subject line (editable)</label>
+        <input id="fb-subject-edit" name="subject_line" type="text" maxlength="120" required placeholder="Pick a subject or type your own" autocomplete="off" />
+        <p style="margin:0.35rem 0 0;font-size:0.8rem;color:#94a3b8">Email subject: <strong>Iowa Neighbor - </strong><span id="fb-subject-preview">…</span></p>
+      </div>
+      <div class="fb-row">
+        <div class="fb-field">
+          <label for="fb-first">First name</label>
+          <input id="fb-first" name="first_name" type="text" autocomplete="given-name" required />
+        </div>
+        <div class="fb-field">
+          <label for="fb-last">Last name</label>
+          <input id="fb-last" name="last_name" type="text" autocomplete="family-name" required />
+        </div>
+      </div>
+      <div class="fb-field">
+        <label for="fb-email">Email</label>
+        <input id="fb-email" name="email" type="email" autocomplete="email" required />
+      </div>
+      <div class="fb-field">
+        <label for="fb-phone">Phone <span style="font-weight:500;color:#64748b">(optional)</span></label>
+        <input id="fb-phone" name="phone" type="tel" autocomplete="tel" />
+      </div>
+      <div class="fb-field">
+        <label for="fb-message">Message</label>
+        <textarea id="fb-message" name="message" required rows="6" placeholder="How can we help?"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send feedback</button>
+      <p class="fb-hint">Goes to outofmemorysolutions@gmail.com. First FormSubmit use may need one inbox confirmation.</p>
+      <button type="button" class="btn btn-ghost" id="fb-mailto" style="margin-top:0.75rem">Backup: open email app</button>
+    </form>
+  </main>
+  <script>
+    (function () {
+      var sel = document.getElementById('fb-subject-select');
+      var edit = document.getElementById('fb-subject-edit');
+      var preview = document.getElementById('fb-subject-preview');
+      document.getElementById('fs-next').value = location.href.replace(/feedback\.html.*/i, 'feedback-thanks.html');
+      function sync() {
+        preview.textContent = (edit.value || '').trim() || '…';
+        document.getElementById('fs-subject').value = 'Iowa Neighbor - ' + ((edit.value || '').trim() || 'Feedback');
+      }
+      sel.addEventListener('change', function () {
+        if (sel.value === 'Other') { edit.value = ''; edit.focus(); }
+        else if (sel.value) edit.value = sel.value;
+        sync();
+      });
+      edit.addEventListener('input', sync);
+      sync();
+      document.getElementById('fb-mailto').onclick = function () {
+        var s = (edit.value || '').trim() || 'Feedback';
+        var body = 'Name: ' + document.getElementById('fb-first').value + ' ' + document.getElementById('fb-last').value +
+          '\nEmail: ' + document.getElementById('fb-email').value +
+          '\nPhone: ' + (document.getElementById('fb-phone').value || '') +
+          '\n\n' + document.getElementById('fb-message').value;
+        location.href = 'mailto:outofmemorysolutions@gmail.com?subject=' + encodeURIComponent('Iowa Neighbor - ' + s) + '&body=' + encodeURIComponent(body);
+      };
+    })();
+  </script>
+</body>
+</html>

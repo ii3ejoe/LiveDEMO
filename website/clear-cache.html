@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Iowa Neighbor V4.2.5.12-LiveDemo</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 32rem; margin: 3rem auto; padding: 0 1rem; color: #0f172a; }
+    h1 { font-size: 1.25rem; color: #0d9488; }
+  </style>
+</head>
+<body>
+  <h1>Clearing update cache (this site only)</h1>
+  <p>This removes <strong>old page files</strong> (service worker / app cache) so you get the latest version.</p>
+  <p><strong>Your Save for offline copy is kept.</strong> Only the in-app button <em>Remove offline copy</em> deletes that data.</p>
+  <p id="status">Working…</p>
+  <script>
+    (async function () {
+      const status = document.getElementById('status');
+      let sw = 0, c = 0;
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r => r.unregister()));
+          sw = regs.length;
+        }
+        if (window.caches) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+          c = keys.length;
+        }
+        // DO NOT remove in_offline_bundle / in_offline_saved_at
+        // Those are only removed via Remove offline copy in the app
+        status.innerHTML = 'Done. Cleared ' + sw + ' service worker(s) and ' + c + ' cache(s).<br><strong>Offline save was not removed.</strong><br>Opening Iowa Neighbor…';
+      } catch (e) {
+        status.textContent = 'Partial clear: ' + e;
+      }
+      setTimeout(function () {
+        location.replace('./index.html?v=cacheclear&t=' + Date.now());
+      }, 800);
+    })();
+  </script>
+</body>
+</html>
