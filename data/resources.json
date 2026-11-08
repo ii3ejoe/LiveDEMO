@@ -8,7 +8,8 @@
     "tags": [
       "Food Pantry",
       "Mobile Pantry",
-      "Delivery"
+      "Delivery",
+      "community-resource"
     ],
     "address": "100 Army Post Road",
     "city": "Des Moines",
@@ -28,7 +29,8 @@
     "image_url": null,
     "latitude": 41.5265,
     "longitude": -93.6632,
-    "last_checked": "2026-10-28T05:18:43Z"
+    "last_checked": "2026-10-28T05:18:43Z",
+    "requirements": "Services and eligibility vary; contact the organization to confirm who they can help and any area or ID requirements."
   },
   {
     "id": "demo-joppa",
@@ -40,7 +42,8 @@
     "tags": [
       "Homeless Services",
       "Resource Center",
-      "Hygiene"
+      "Hygiene",
+      "user-submitted"
     ],
     "address": "2326 Euclid Avenue",
     "city": "Des Moines",
@@ -60,7 +63,8 @@
     "image_url": null,
     "latitude": 41.6128,
     "longitude": -93.6545,
-    "last_checked": "2026-10-28T05:18:43Z"
+    "last_checked": "2026-10-28T05:18:43Z",
+    "requirements": "Confirm service area and eligibility with the provider before referring (details may not appear on the public website)."
   },
   {
     "id": "demo-phc-intake",
@@ -93,7 +97,8 @@
     "image_url": null,
     "latitude": 41.6012,
     "longitude": -93.6288,
-    "last_checked": "2026-10-28T05:18:43Z"
+    "last_checked": "2026-10-28T05:18:43Z",
+    "requirements": ""
   },
   {
     "id": "demo-love-inc",
@@ -125,7 +130,8 @@
     "image_url": null,
     "latitude": 41.5955,
     "longitude": -93.641,
-    "last_checked": "2026-10-28T05:18:43Z"
+    "last_checked": "2026-10-28T05:18:43Z",
+    "requirements": ""
   },
   {
     "id": "demo-bethel-mission",
@@ -156,7 +162,8 @@
     "image_url": null,
     "latitude": 41.5978,
     "longitude": -93.6255,
-    "last_checked": "2026-10-28T05:18:43Z"
+    "last_checked": "2026-10-28T05:18:43Z",
+    "requirements": ""
   },
   {
     "id": "demo-ica-coordinated-entry",
@@ -187,7 +194,8 @@
     "image_url": null,
     "latitude": 41.5895,
     "longitude": -93.628,
-    "last_checked": "2026-10-28T05:18:43Z"
+    "last_checked": "2026-10-28T05:18:43Z",
+    "requirements": ""
   },
   {
     "id": "demo-ihyc",
@@ -219,7 +227,8 @@
     "image_url": null,
     "latitude": 41.5868,
     "longitude": -93.6259,
-    "last_checked": "2026-10-28T05:18:43Z"
+    "last_checked": "2026-10-28T05:18:43Z",
+    "requirements": ""
   },
   {
     "id": "demo-phc-clinic",
@@ -250,6 +259,7 @@
     "image_url": null,
     "latitude": 41.601,
     "longitude": -93.6285,
-    "last_checked": "2026-10-28T05:18:43Z"
+    "last_checked": "2026-10-28T05:18:43Z",
+    "requirements": ""
   }
 ]
