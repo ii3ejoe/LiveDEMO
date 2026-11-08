@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iowa Neighbor V4.2.5.22-LiveDemo</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0d9488" />
+  <meta name="description" content="Support Iowa Neighbor — a free, open community resource directory kept on a $0 budget." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="version.js" defer></script>
+  <script src="offline.js" defer></script>
+  <script src="pwa.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <circle cx="18" cy="18" r="18" fill="#0d9488"/>
+          <path d="M12 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="14.5" cy="14.5" r="2.2" fill="#fff"/>
+          <circle cx="21.5" cy="14.5" r="2.2" fill="#fff"/>
+        </svg>
+        <div class="logo-text">
+          <span class="brand">Iowa Neighbor V4.2.5.22-LiveDemo</span><span class="version"></span>
+        </div>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#results" class="nav-link">Find Resources</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="support.html" class="nav-link active">Support</a>
+      </nav>
+      <div class="header-actions">
+        <a href="support.html" class="btn btn-primary">Get Help</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <div class="page-card support-card">
+      <h1>Support Iowa Neighbor</h1>
+
+      <div class="support-philosophy" style="margin:0 0 1.25rem;padding:1.1rem 1.2rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px">
+        <h2 style="margin:0 0 0.5rem;font-size:1.15rem;color:#0f172a">Your Donation Doesn’t Buy Access. It Helps Keep Access Available.</h2>
+        <p style="margin:0 0 0.65rem">
+          Iowa Neighbor is free to use. Donations are entirely voluntary, and nobody should feel that they need to contribute to use the resources.
+        </p>
+        <p style="margin:0 0 0.35rem"><strong>So what do donations actually support?</strong></p>
+        <p style="margin:0 0 0.5rem">They help cover the practical costs of developing, maintaining, and improving Iowa Neighbor, including:</p>
+        <ul style="margin:0 0 0.75rem;padding-left:1.25rem;color:#334155">
+          <li><strong>AI subscriptions</strong> — tools used to assist with development, research, and maintenance.</li>
+          <li><strong>Supabase</strong> — database and backend services when online functionality needs them.</li>
+          <li><strong>Cloudflare</strong> — hosting, delivery, and infrastructure that helps keep online features available.</li>
+        </ul>
+        <p style="margin:0 0 0.65rem">
+          <strong>What happens if donations don’t cover the costs?</strong>
+          If operating costs eventually exceed available funding, some online features may need to be reduced, limited, or discontinued.
+          The offline foundation is different: functionality already on a user’s device should remain usable even if hosted services are no longer maintained.
+          It may stop receiving updates, but it shouldn’t suddenly require a donation or subscription to keep working.
+        </p>
+        <p style="margin:0 0 0.65rem">
+          You can use Iowa Neighbor, share it with others, and benefit from its resources without donating anything.
+          If you have the means and want to help support continued development and online availability, your contribution is appreciated.
+        </p>
+        <p style="margin:0;font-weight:600;color:#0f766e">
+          Availability before abundance. Quality before quantity. Access before profit.
+        </p>
+        <p style="margin:0.5rem 0 0;color:#64748b;font-size:0.9rem">
+          Use it. Share it. Support it if you can. No guilt, no paywall.
+        </p>
+      </div>
+
+      <p class="support-lead">
+        Iowa Neighbor is built from lived experience and a deep understanding of local needs.
+        We’re a free open resource directory—$0 budget, 100% volunteer-led—connecting neighbors
+        with trusted community resources. Every contribution helps us keep the work sustainable
+        and accessible for all.
+      </p>
+
+      <div class="amount-row" role="group" aria-label="Donation amount">
+        <button type="button" class="amount-btn" data-amount="1">$1</button>
+        <button type="button" class="amount-btn" data-amount="5">$5</button>
+        <button type="button" class="amount-btn selected" data-amount="10">$10</button>
+        <button type="button" class="amount-btn" data-amount="20">$20</button>
+        <button type="button" class="amount-btn" data-amount="other">Other</button>
+      </div>
+      <div class="other-amount-wrap" id="other-amount-wrap" hidden>
+        <label for="other-amount">Amount (USD)</label>
+        <input type="number" id="other-amount" min="1" step="1" placeholder="Enter amount" />
+      </div>
+
+      <div class="donate-actions">
+        <!-- PayPal.me: outofmemorysolutions -->
+        <a id="btn-paypal" class="btn btn-primary btn-donate"
+           href="https://www.paypal.me/outofmemorysolutions/10"
+           target="_blank" rel="noopener noreferrer">
+          Donate with PayPal
+        </a>
+        <!-- Cash App: $outofmemorysolutions -->
+        <a id="btn-cashapp" class="btn btn-outline btn-donate"
+           href="https://cash.app/$outofmemorysolutions/10"
+           target="_blank" rel="noopener noreferrer">
+          Cash App
+        </a>
+      </div>
+
+      <p class="support-note">
+        <span class="note-icon" aria-hidden="true">✓</span>
+        Cash App: <strong>$outofmemorysolutions</strong> · PayPal: <strong>paypal.me/outofmemorysolutions</strong>
+      </p>
+      <p class="support-about-link">
+        <a href="about.html">Read the full story on the About page →</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand">Iowa Neighbor</span>
+      </div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="support.html">Support</a>
+        <a href="index.html">Home</a>
+      </div>
+      <p class="footer-note">Built with free &amp; open-source tools · Map data © OpenStreetMap contributors</p>
+    </div>
+  </footer>
+
+  
+  <script>
+    (function () {
+      var PAYPAL_ME = "https://www.paypal.me/outofmemorysolutions";
+      var CASHAPP_BASE = "https://cash.app/$outofmemorysolutions";
+      var amount = 10;
+
+      var buttons = document.querySelectorAll(".amount-btn");
+      var otherWrap = document.getElementById("other-amount-wrap");
+      var otherInput = document.getElementById("other-amount");
+      var btnPaypal = document.getElementById("btn-paypal");
+      var btnCash = document.getElementById("btn-cashapp");
+
+      function syncLinks() {
+        if (!btnPaypal || !btnCash) return;
+        if (amount > 0) {
+          btnPaypal.href = PAYPAL_ME + "/" + amount;
+          btnCash.href = CASHAPP_BASE + "/" + amount;
+        } else {
+          // Other with no number yet → main pages
+          btnPaypal.href = PAYPAL_ME;
+          btnCash.href = CASHAPP_BASE;
+        }
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          buttons.forEach(function (b) { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+          var v = btn.getAttribute("data-amount");
+          if (v === "other") {
+            if (otherWrap) otherWrap.hidden = false;
+            amount = otherInput ? (parseInt(otherInput.value, 10) || 0) : 0;
+          } else {
+            if (otherWrap) otherWrap.hidden = true;
+            amount = parseInt(v, 10);
+          }
+          syncLinks();
+        });
+      });
+
+      if (otherInput) {
+        otherInput.addEventListener("input", function () {
+          amount = parseInt(otherInput.value, 10) || 0;
+          syncLinks();
+        });
+      }
+
+      syncLinks();
+    })();
+  </script>
+
+</body>
+</html>
