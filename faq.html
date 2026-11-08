@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ — Iowa Neighbor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="version.js" defer></script>
+  <style>
+    .faq-wrap { max-width: 40rem; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    .faq-wrap h1 { font-size: 1.5rem; margin: 0 0 0.35rem; color: #0f172a; }
+    .faq-lede { color: #64748b; margin: 0 0 1.25rem; font-size: 0.95rem; }
+    .faq-item {
+      border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;
+      margin-bottom: 0.65rem; overflow: hidden;
+    }
+    .faq-item summary {
+      list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+      gap: 0.75rem; padding: 0.9rem 1rem; font-weight: 600; color: #0f172a; font-size: 0.95rem;
+      user-select: none;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "▾"; color: #0d9488; font-size: 1rem; transition: transform 0.15s ease;
+      flex-shrink: 0;
+    }
+    .faq-item[open] summary::after { transform: rotate(180deg); }
+    .faq-item .faq-body {
+      padding: 0 1rem 1rem; color: #334155; font-size: 0.9rem; line-height: 1.5;
+      border-top: 1px solid #f1f5f9;
+    }
+    .faq-item .faq-body p { margin: 0.75rem 0 0; }
+    .faq-item .faq-body a { color: #0d9488; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark" aria-hidden="true">IN</span>
+        <span class="logo-text"><span class="brand">Iowa Neighbor</span></span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="faq.html" class="nav-link active">FAQ</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="support.html" class="nav-link">Support</a>
+      </nav>
+    </div>
+  </header>
+  <main class="faq-wrap">
+    <h1>Frequently asked questions</h1>
+    <p class="faq-lede">Tap a question to expand. Tap again (or the arrow) to collapse.</p>
+
+    <details class="faq-item">
+      <summary>Is Iowa Neighbor free to use?</summary>
+      <div class="faq-body">
+        <p>Yes. The directory is free. Donations are voluntary and never required to search or save resources for offline use.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Does it work without internet?</summary>
+      <div class="faq-body">
+        <p>Yes, for the core experience. Use <strong>Online</strong> → save a copy for offline viewing. Later, with no connection, you can still open the app shell and any list you saved. Online features (fresh updates, geocoding, some maps) need a connection.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Why do I see no results until I search?</summary>
+      <div class="faq-body">
+        <p>The list stays empty until you click <strong>Search</strong>. That keeps the first screen clear and makes online vs offline behavior easier to understand in demos and daily use.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Are the resources always 100% up to date?</summary>
+      <div class="faq-body">
+        <p>We aim for reliable, verified information, but hours and eligibility change. Always confirm with the organization before referring someone or traveling for help. Look for last-updated notes when shown.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What does “User submitted” mean?</summary>
+      <div class="faq-body">
+        <p>That resource came from a community or partner submission (or an imported list) and was reviewed for the public list. Treat it like any other entry: verify details with the organization.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>How do I suggest a new resource or a correction?</summary>
+      <div class="faq-body">
+        <p>Use <a href="share-resource.html">Share a Resource</a> to suggest something new (reviewed before it goes public). Use <a href="feedback.html">Feedback</a> for questions or corrections.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I install this on my phone or computer?</summary>
+      <div class="faq-body">
+        <p>Yes. Use <strong>Add a Shortcut</strong> / Add to Home Screen when your browser offers it. That installs a shortcut icon without an app store. You still use the same site—online when available, offline for what you saved.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What does clearing cache do?</summary>
+      <div class="faq-body">
+        <p>A normal browser “clear cache” may refresh site files but should not remove your offline resource save. To remove saved offline data, use the site’s <strong>Remove offline copy</strong> control (or clear site data for this site only, which is intentional and stronger).</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Is this an official government or 211 site?</summary>
+      <div class="faq-body">
+        <p>No. Iowa Neighbor is an independent project (Out of Memory Solutions / iD10T). Sample or public data may be used for demos; always verify before relying on a listing.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>How can I support the project?</summary>
+      <div class="faq-body">
+        <p>Use and share it. If you want to help with costs (hosting, tools), visit the <a href="support.html">Support</a> page. Donations don’t unlock features—they help keep access available.</p>
+      </div>
+    </details>
+
+    <p style="margin-top:1.5rem">
+      <a class="btn btn-primary" href="index.html">Back to search</a>
+      <a class="btn btn-ghost" href="feedback.html" style="margin-left:0.5rem">Still have a question?</a>
+    </p>
+  </main>
+</body>
+</html>
