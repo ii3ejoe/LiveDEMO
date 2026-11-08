@@ -253,6 +253,14 @@ function applyFilters() {
   }
   filtered = allResources.filter(r => {
     if (cat && !(r.categories || []).includes(cat)) return false;
+
+  // Public site: hide pending imports until verified (legacy rows with no status still show)
+  filtered = filtered.filter(function (r) {
+    var st = (r.verification_status || '').toLowerCase();
+    if (!st) return true;
+    if (st === 'pending' || st === 'needs review' || st === 'unverified' || st === 'needs_review') return false;
+    return true;
+  });
     if (checkedTypes.length) {
       const tags = r.tags || [], cats = r.categories || [];
       const hit = checkedTypes.some(t => tags.includes(t) || cats.includes(t) || (t === 'Other Services' && !tags.length));
@@ -302,7 +310,7 @@ function cardHTML(r) {
       })()}
     </div>
     <div class="card-body">
-      <div class="card-tags">${cats}${tags}</div>
+      <div class="card-tags">${userSubmittedBadge(r)}${cats}${tags}</div>
       <h3>${esc(r.name)}</h3>
       <div class="card-meta">
         ${r.full_address ? `<span>📍 ${esc(r.full_address)}</span>` : ''}
@@ -350,13 +358,15 @@ function openDetail(id) {
     : '—';
   document.getElementById('detail-content').innerHTML = `
     <h2>${esc(r.name)}</h2>
-    <div class="card-tags" style="margin-bottom:0.75rem">${(r.categories||[]).map(c=>'<span class="tag">'+esc(c)+'</span>').join('')}${(r.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')}</div>
+    <div class="card-tags" style="margin-bottom:0.75rem">${userSubmittedBadge(r)}${(r.categories||[]).map(c=>'<span class="tag">'+esc(c)+'</span>').join('')}${(r.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')}</div>
     <div class="card-meta" style="margin-bottom:0.75rem">
-      ${r.full_address ? '<span>📍 '+esc(r.full_address)+'</span>' : ''}
-      ${r.phone ? '<span>📞 '+esc(r.phone)+'</span>' : ''}
-      ${r.hours ? '<span>🕒 '+esc(r.hours)+'</span>' : ''}
+      ${r.full_address && pubOn(r,'address') ? '<span>📍 '+esc(r.full_address)+'</span>' : ''}
+      ${r.phone && pubOn(r,'phone') ? '<span>📞 '+esc(r.phone)+'</span>' : ''}
+      ${r.hours && pubOn(r,'hours') ? '<span>🕒 '+esc(r.hours)+'</span>' : ''}
     </div>
-    ${r.description ? '<p class="card-desc">'+esc(r.description)+'</p>' : ''}
+    ${r.description && pubOn(r,'description') ? '<p class="card-desc">'+esc(r.description)+'</p>' : ''}
+    ${r.requirements && pubOn(r,'requirements') ? '<div class="detail-requirements" style="margin:0.75rem 0;padding:0.75rem 1rem;background:#fff7ed;border:1px solid #fed7aa;border-radius:8px"><strong>Requirements</strong><p style="margin:0.35rem 0 0;color:#9a3412">'+esc(r.requirements)+'</p></div>' : ''}
+    ${ (r.tags && r.tags.length) ? '<p class="meta-line">Tags: '+r.tags.map(function(t){return esc(t)}).join(', ')+'</p>' : '' }
     <p class="meta-line">Eligibility: ${esc(r.eligibility||'Varies')} · Source: ${esc(r.source||r.source_name||'Website')}</p>
     <div id="detail-map" class="detail-map" aria-label="Map showing resource location"></div>
     <div class="detail-actions">
@@ -364,12 +374,16 @@ function openDetail(id) {
       ${hasGeo ? '<a class="btn btn-outline" href="'+osmDirectionsUrl(r.lat,r.lng)+'" target="_blank" rel="noopener">Directions in browser (OSM)</a>' : ''}
       ${hasGeo ? '<a class="btn btn-outline" href="'+pin+'" target="_blank" rel="noopener">Open in OpenStreetMap</a>' : ''}
       ${r.website ? '<a class="btn btn-outline" href="'+esc(r.website)+'" target="_blank" rel="noopener">Website</a>' : ''}
+      <button type="button" class="btn btn-outline" id="detail-print-btn">Save a copy to share or print</button>
     </div>
     ${!hasGeo ? '<p class="support-note">No coordinates yet — directions unavailable.</p>' : ''}
     <p class="detail-verified-foot">Information verified by Iowa Neighbor · Last updated ${lastCheckedDetail}</p>
   `;
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
+  const printBtn = document.getElementById('detail-print-btn');
+  if (printBtn) printBtn.addEventListener('click', function () { printResourceSummary(r); });
+
   // Leaflet detail map
   setTimeout(() => {
     const el = document.getElementById('detail-map');
@@ -436,6 +450,21 @@ function bindEvents() {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDetail(); });
 }
 
+
+function pubOn(r, key) {
+  const pf = r.public_fields;
+  if (!pf) return true;
+  if (pf[key] === false) return false;
+  return true;
+}
+
+function userSubmittedBadge(r) {
+  const tags = (r.tags || []).map(t => String(t).toLowerCase());
+  if (!tags.includes('user-submitted') && !tags.includes('user submitted')) return '';
+  return '<span class="user-submitted-badge" title="Community or partner submitted — verify before referring">' +
+    '<span class="usb-icon" aria-hidden="true">IN</span> User submitted</span>';
+}
+
 function esc(s) {
   if (s == null) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -469,4 +498,37 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initStateSelect);
 } else {
   initStateSelect();
+}
+
+
+/** One-page summary — browser print / Save as PDF. Neutral open-project wording. */
+function printResourceSummary(r) {
+  let el = document.getElementById('print-summary');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'print-summary';
+    document.body.appendChild(el);
+  }
+  const last = r.last_checked
+    ? new Date(r.last_checked).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : '—';
+  const cats = (r.categories || []).join(', ') || '—';
+  const tags = (r.tags || []).join(', ');
+  el.innerHTML = `
+    <h1 style="font-size:1.35rem;margin:0 0 0.5rem">${esc(r.name)}</h1>
+    <p style="margin:0 0 0.75rem;color:#334155"><strong>Categories:</strong> ${esc(cats)}</p>
+    ${r.full_address ? '<p style="margin:0.25rem 0"><strong>Address:</strong> ' + esc(r.full_address) + '</p>' : ''}
+    ${r.phone ? '<p style="margin:0.25rem 0"><strong>Phone:</strong> ' + esc(r.phone) + '</p>' : ''}
+    ${r.hours ? '<p style="margin:0.25rem 0"><strong>Hours:</strong> ' + esc(r.hours) + '</p>' : ''}
+    ${r.website ? '<p style="margin:0.25rem 0"><strong>Website:</strong> ' + esc(r.website) + '</p>' : ''}
+    ${r.description ? '<p style="margin:0.75rem 0">' + esc(r.description) + '</p>' : ''}
+    ${r.requirements ? '<p style="margin:0.75rem 0;padding:0.6rem;border:1px solid #fdba74;background:#fff7ed"><strong>Requirements:</strong> ' + esc(r.requirements) + '</p>' : ''}
+    <p style="margin:0.5rem 0"><strong>Eligibility:</strong> ${esc(r.eligibility || 'Varies')}</p>
+    ${tags ? '<p style="margin:0.35rem 0"><strong>Tags:</strong> ' + esc(tags) + '</p>' : ''}
+    <hr style="margin:1rem 0;border:none;border-top:1px solid #cbd5e1" />
+    <p style="font-size:0.9rem;color:#475569">From Iowa Neighbor — community resource directory. Always verify with the organization before referring.</p>
+    <p style="font-size:0.85rem;color:#64748b">Source: ${esc(r.source || r.source_name || 'Website')} · Last updated: ${esc(last)}</p>
+    <p style="font-size:0.8rem;color:#94a3b8">Open project. Information may change.</p>
+  `;
+  window.print();
 }

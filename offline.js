@@ -246,11 +246,11 @@
     if (online) {
       if (label) label.textContent = 'Online';
       if (dateEl) dateEl.textContent = formatDisplayDate();
-      btn.title = "Online loads the shared list; offline shows the last copy you saved on this device so you're not left with nothing." + ' Live date: ' + formatDisplayDate();
+      btn.title = "Online loads the shared list; offline shows the last copy you saved on this device so you're not left with nothing. Clearing only the page cache does not remove your offline save — use Remove offline copy for that. (Browser “Clear site data” for this site can still erase everything.)" + ' Live date: ' + formatDisplayDate();
     } else {
       if (label) label.textContent = 'Offline';
       if (dateEl) dateEl.textContent = meta.at ? formatDisplayDate(meta.at) : 'No save';
-      btn.title = "Online loads the shared list; offline shows the last copy you saved on this device so you're not left with nothing." + (meta.at ? ' Last saved: ' + formatDisplayDate(meta.at) : ' No saved copy yet.');
+      btn.title = "Online loads the shared list; offline shows the last copy you saved on this device so you're not left with nothing. Clearing only the page cache does not remove your offline save — use Remove offline copy for that. (Browser “Clear site data” for this site can still erase everything.)" + (meta.at ? ' Last saved: ' + formatDisplayDate(meta.at) : ' No saved copy yet.');
     }
 
     // Expose for app.js to load offline resources
