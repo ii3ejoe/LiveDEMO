@@ -30,6 +30,25 @@
 <body>
   <!-- ═══════════ HEADER ═══════════ -->
 <header class="site-header">
+  <div class="header-top-strip">
+    <div class="header-actions">
+        <!-- FUTURE: multi-state switcher. Hidden until MN/IL launch.
+             Set SITE_CONFIG.ACTIVE_STATE / uncomment STATES in app.js,
+             then remove the hidden attribute (or .state-select-wrap { display:none }). -->
+        <div class="state-select-wrap" hidden>
+          <label for="state-select" class="sr-only">State</label>
+          <select id="state-select" aria-label="Select state directory">
+            <option value="IA" selected>Iowa Neighbor</option>
+            <option value="MN" disabled>Minnesota Neighbor (soon)</option>
+            <option value="IL" disabled>Illinois Neighbor (soon)</option>
+          </select>
+        </div>
+
+        <a class="btn btn-primary" href="feedback.html">Feedback</a>
+        <a class="btn btn-ghost" href="share-resource.html">Share a Resource</a>
+      </div>
+  </div>
+
     <div class="header-inner">
       <a href="/" class="logo">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
@@ -54,22 +73,7 @@
         </div>
       </nav>
 
-      <div class="header-actions">
-        <!-- FUTURE: multi-state switcher. Hidden until MN/IL launch.
-             Set SITE_CONFIG.ACTIVE_STATE / uncomment STATES in app.js,
-             then remove the hidden attribute (or .state-select-wrap { display:none }). -->
-        <div class="state-select-wrap" hidden>
-          <label for="state-select" class="sr-only">State</label>
-          <select id="state-select" aria-label="Select state directory">
-            <option value="IA" selected>Iowa Neighbor</option>
-            <option value="MN" disabled>Minnesota Neighbor (soon)</option>
-            <option value="IL" disabled>Illinois Neighbor (soon)</option>
-          </select>
-        </div>
-
-        <a class="btn btn-primary" href="feedback.html">Feedback</a>
-        <a class="btn btn-ghost" href="share-resource.html">Share a Resource</a>
-      </div>
+      
     </div>
   </header>
 
