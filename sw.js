@@ -4,7 +4,7 @@
  * - When online: prefer network for HTML/JS/JSON (fresh updates)
  * - When offline: serve cached shell + last resources.json if present
  */
-const CACHE = 'iowa-neighbor-4.2.5.39-LiveDemo';
+const CACHE = 'iowa-neighbor-4-2-5-40-LiveDemo';
 const SHELL = [
   './',
   './index.html',
