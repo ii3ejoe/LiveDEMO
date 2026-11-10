@@ -1427,3 +1427,20 @@ body.page-inner .page-eyebrow {
   text-transform: uppercase;
   margin: 0 0 0.35rem;
 }
+
+
+/* Alias if older offline.js used .conn-popover */
+.conn-popover {
+  position: fixed;
+  top: 3.5rem;
+  right: 1rem;
+  z-index: 1600;
+  max-width: min(360px, calc(100vw - 1.5rem));
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(15,23,42,0.14);
+  padding: 1rem 1.1rem;
+}
+.conn-mode-pop { z-index: 3000; }
+.conn-popover { z-index: 3000; }

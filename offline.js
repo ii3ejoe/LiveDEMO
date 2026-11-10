@@ -109,7 +109,7 @@
         (meta.hasData
           ? '<p class="conn-muted">Offline copy on this device: <strong>' + meta.count + ' resources</strong> · ' + savedLabel + '</p>'
           : '<p class="conn-muted">No offline copy saved on this device yet.</p>') +
-        '<div class="conn-actions">' +
+        '<div class="conn-pop-actions">' +
         '<button type="button" class="btn btn-primary" id="conn-save-btn">' +
         (meta.hasData ? 'Update offline copy' : 'Save for offline viewing') +
         '</button>' +
@@ -127,7 +127,7 @@
           ? '<p class="conn-muted"><strong>' + meta.count + ' resources</strong> on this device. Click Search to show them.</p>'
           : '<p class="conn-muted">No saved copy. Go online and use <strong>Save for offline viewing</strong>.</p>') +
         (outdated && meta.hasData ? '<p class="conn-warn">Saved date is not today — data may be outdated.</p>' : '') +
-        '<div class="conn-actions">' +
+        '<div class="conn-pop-actions">' +
         '<button type="button" class="btn btn-primary" id="conn-got-it">Got it</button>' +
         '<button type="button" class="btn btn-outline" id="conn-retry">Try again when online</button>' +
         '</div>';
@@ -285,9 +285,9 @@
     if (!document.getElementById('conn-popover')) {
       const pop = document.createElement('div');
       pop.id = 'conn-popover';
-      pop.className = 'conn-popover';
+      pop.className = 'conn-mode-pop';
       pop.hidden = true;
-      pop.innerHTML = '<div class="conn-pop-head"><strong>Connection mode</strong><button type="button" class="conn-pop-close" aria-label="Close">×</button></div><div class="conn-pop-body"></div>';
+      pop.innerHTML = '<div class="conn-pop-card"><div class="conn-pop-head"><strong>Connection mode</strong><button type="button" class="conn-pop-close" aria-label="Close">×</button></div><div class="conn-pop-body"></div></div>';
       document.body.appendChild(pop);
       pop.querySelector('.conn-pop-close').addEventListener('click', function () { pop.hidden = true; });
       document.addEventListener('click', function (e) {
