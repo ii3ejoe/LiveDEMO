@@ -1,12 +1,116 @@
 /**
- * Add to Home Screen / shortcut — restored simple flow
+ * Optional Add to Home Screen (PWA) — not forced.
+ * Online/Offline control lives in offline.js.
  */
 (function () {
-  var deferredPrompt = null;
+  let deferredPrompt = null;
 
-  // Register SW immediately (same pattern that worked before)
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(function () {});
+  function installButtonLabel() {
+    const ua = navigator.userAgent || '';
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+    return isMobile ? 'Add to Home Screen' : 'Add a Shortcut';
+  }
+
+
+  function ensureInstallBtn() {
+    if (document.getElementById('pwa-install-btn')) return;
+    const actions = document.querySelector('.header-top-strip .header-actions') || document.querySelector('.header-actions');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'pwa-install-btn';
+    btn.className = 'pwa-install-btn';
+    btn.textContent = installButtonLabel();
+    btn.title = 'Optional — add a shortcut on this device';
+    if (actions) {
+      // place after connection status if present
+      const conn = document.getElementById('conn-status-btn');
+      if (conn && conn.parentNode === actions) {
+        actions.insertBefore(btn, conn.nextSibling);
+      } else {
+        actions.insertBefore(btn, actions.firstChild);
+      }
+    } else {
+      btn.classList.add('pwa-install-fixed');
+      document.body.appendChild(btn);
+    }
+    btn.addEventListener('click', openInstallPop);
+  }
+
+  function ensurePop() {
+    if (document.getElementById('pwa-install-pop')) return;
+    const pop = document.createElement('div');
+    pop.id = 'pwa-install-pop';
+    pop.className = 'pwa-install-pop';
+    pop.hidden = true;
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', installButtonLabel());
+    pop.innerHTML = [
+      '<div class="pwa-pop-card">',
+      '  <div class="pwa-pop-head">',
+      '    <strong>' + installButtonLabel() + '</strong>',
+      '    <button type="button" class="pwa-pop-close" aria-label="Close">×</button>',
+      '  </div>',
+      '  <div class="pwa-pop-body">',
+      '    <p>This is <strong>optional</strong>. You can keep using Iowa Neighbor in your browser anytime.</p>',
+      '    <p>Adding to the home screen creates a shortcut icon and can open the site in a simple app-style window.</p>',
+      '    <p class="pwa-muted">This does <strong>not</strong> use the Apple App Store or Google Play. It uses your browser’s built-in “Add to Home Screen” feature.</p>',
+      '    <p class="pwa-muted">Works with the Online / Offline control: save a copy while online, then use it when offline.</p>',
+      '  </div>',
+      '  <div class="pwa-pop-actions">',
+      '    <button type="button" class="btn btn-outline" id="pwa-no">No</button>',
+      '    <button type="button" class="btn btn-primary" id="pwa-yes">Yes, continue</button>',
+      '  </div>',
+      '  <p id="pwa-hint" class="pwa-hint" hidden></p>',
+      '</div>'
+    ].join('');
+    document.body.appendChild(pop);
+    pop.querySelector('.pwa-pop-close').addEventListener('click', closePop);
+    document.getElementById('pwa-no').addEventListener('click', closePop);
+    document.getElementById('pwa-yes').addEventListener('click', onYes);
+    document.addEventListener('click', function (e) {
+      if (!pop.hidden && !pop.contains(e.target) && e.target.id !== 'pwa-install-btn') closePop();
+    });
+  }
+
+  function openInstallPop() {
+    ensurePop();
+    const pop = document.getElementById('pwa-install-pop');
+    const hint = document.getElementById('pwa-hint');
+    if (hint) { hint.hidden = true; hint.textContent = ''; }
+    pop.hidden = false;
+  }
+
+  function closePop() {
+    const pop = document.getElementById('pwa-install-pop');
+    if (pop) pop.hidden = true;
+  }
+
+  async function onYes() {
+    const hint = document.getElementById('pwa-hint');
+    // Chrome/Edge install prompt when available
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      if (hint) {
+        hint.hidden = false;
+        hint.textContent = choice.outcome === 'accepted'
+          ? 'Shortcut install was accepted.'
+          : 'Install was dismissed. You can try again later.';
+      }
+      if (choice.outcome === 'accepted') closePop();
+      return;
+    }
+    // iOS / browsers without beforeinstallprompt
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (hint) {
+      hint.hidden = false;
+      if (isIOS) {
+        hint.innerHTML = 'On iPhone/iPad: tap the <strong>Share</strong> button, then <strong>Add to Home Screen</strong>.';
+      } else {
+        hint.innerHTML = 'Use your browser menu: <strong>Install app</strong> or <strong>Add to Home Screen</strong>. (Prompt not available in this browser yet.)';
+      }
+    }
   }
 
   window.addEventListener('beforeinstallprompt', function (e) {
@@ -14,109 +118,11 @@
     deferredPrompt = e;
   });
 
-  function isMobile() {
-    return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
-  }
-  function isIOS() {
-    return /iPhone|iPad|iPod/i.test(navigator.userAgent || '') ||
-      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  }
-  function label() {
-    return isMobile() ? 'Add to Home Screen' : 'Add a Shortcut';
-  }
-
-  function ensureBtn() {
-    if (document.getElementById('pwa-install-btn')) return;
-    var host = document.querySelector('.header-top-strip .header-actions') ||
-               document.querySelector('.header-actions');
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.id = 'pwa-install-btn';
-    btn.className = 'pwa-install-btn';
-    btn.textContent = label();
-    if (host) {
-      var conn = document.getElementById('conn-status-btn');
-      if (conn && conn.parentNode === host) host.insertBefore(btn, conn.nextSibling);
-      else host.appendChild(btn);
-    } else {
-      document.body.appendChild(btn);
-    }
-    btn.addEventListener('click', openPop);
-  }
-
-  function ensurePop() {
-    if (document.getElementById('pwa-install-pop')) return;
-    var pop = document.createElement('div');
-    pop.id = 'pwa-install-pop';
-    pop.className = 'pwa-install-pop';
-    pop.hidden = true;
-    pop.innerHTML =
-      '<div class="pwa-pop-card">' +
-      '<div class="pwa-pop-head"><strong>' + label() + '</strong>' +
-      '<button type="button" class="pwa-pop-close" aria-label="Close">×</button></div>' +
-      '<div class="pwa-pop-body">' +
-      '<p>Optional shortcut on this device. Not from Google Play or the App Store.</p>' +
-      '<div id="pwa-steps"></div></div>' +
-      '<div class="pwa-pop-actions">' +
-      '<button type="button" class="btn btn-outline" id="pwa-no">Not now</button>' +
-      '<button type="button" class="btn btn-primary" id="pwa-yes">Yes, continue</button></div>' +
-      '<p id="pwa-hint" class="pwa-hint" hidden></p></div>';
-    document.body.appendChild(pop);
-    pop.querySelector('.pwa-pop-close').onclick = closePop;
-    document.getElementById('pwa-no').onclick = closePop;
-    document.getElementById('pwa-yes').onclick = onYes;
-  }
-
-  function steps() {
-    if (isIOS()) {
-      return '<ol class="pwa-steps"><li>Tap <strong>Share</strong> (□ with arrow).</li>' +
-        '<li>Tap <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li></ol>';
-    }
-    if (/Android/i.test(navigator.userAgent || '')) {
-      return '<ol class="pwa-steps">' +
-        '<li>Tap <strong>Yes, continue</strong> for the install popup if Chrome shows it.</li>' +
-        '<li>Or tap <strong>⋮</strong> → scroll for <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li>' +
-        '<li>Or <strong>Share…</strong> → <strong>Add to Home screen</strong>.</li></ol>';
-    }
-    return '<ol class="pwa-steps"><li>Click Yes for the install popup.</li>' +
-      '<li>Or use the install icon in the address bar / browser menu.</li></ol>';
-  }
-
-  function openPop() {
-    ensurePop();
-    document.getElementById('pwa-steps').innerHTML = steps();
-    var h = document.getElementById('pwa-hint');
-    if (h) { h.hidden = true; h.textContent = ''; }
-    document.getElementById('pwa-install-pop').hidden = false;
-  }
-  function closePop() {
-    var p = document.getElementById('pwa-install-pop');
-    if (p) p.hidden = true;
-  }
-
-  async function onYes() {
-    var hint = document.getElementById('pwa-hint');
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      var choice = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      if (hint) {
-        hint.hidden = false;
-        hint.textContent = choice.outcome === 'accepted' ? 'Added to this device.' : 'Dismissed — try ⋮ → Install app.';
-      }
-      if (choice.outcome === 'accepted') closePop();
-      return;
-    }
-    if (hint) {
-      hint.hidden = false;
-      hint.innerHTML = isIOS()
-        ? 'Use <strong>Share → Add to Home Screen</strong> (required on iPhone).'
-        : 'No popup yet. Use <strong>⋮ → Install app</strong> (scroll the menu) or <strong>Share → Add to Home screen</strong>.';
-    }
-  }
-
   document.addEventListener('DOMContentLoaded', function () {
-    ensureBtn();
+    ensureInstallBtn();
     ensurePop();
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(function () {});
+    }
   });
 })();
