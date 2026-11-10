@@ -108,7 +108,7 @@
       if (isIOS) {
         hint.innerHTML = 'On iPhone/iPad: tap the <strong>Share</strong> button, then <strong>Add to Home Screen</strong>.';
       } else {
-        hint.innerHTML = 'Use your browser menu: <strong>Install app</strong> or <strong>Add to Home Screen</strong>. (Prompt not available in this browser yet.)';
+        hint.innerHTML = 'Tap the browser menu (<strong>⋮</strong> or <strong>⋯</strong>) → <strong>Install app</strong> or <strong>Add to Home screen</strong>. On some phones the automatic prompt only appears after you visit a few times.';
       }
     }
   }
@@ -122,7 +122,7 @@
     ensureInstallBtn();
     ensurePop();
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(function () {});
+      navigator.serviceWorker.register('sw.js').catch(function () {});
     }
   });
 })();

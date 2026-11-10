@@ -1,4 +1,4 @@
-window.IOWA_NEIGHBOR_VERSION = "4.2.5.34-LiveDemo";
+window.IOWA_NEIGHBOR_VERSION = "4.2.5.35-LiveDemo";
 window.IOWA_NEIGHBOR_BRAND = "Iowa Neighbor V" + window.IOWA_NEIGHBOR_VERSION;
 document.addEventListener("DOMContentLoaded", function () {
   document.title = window.IOWA_NEIGHBOR_BRAND;

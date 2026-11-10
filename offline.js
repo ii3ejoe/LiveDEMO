@@ -9,8 +9,14 @@
   const CACHE_NAME = 'iowa-neighbor-offline-v2';
 
   function todayKey() {
-    const d = new Date();
-    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    return localDateKey(new Date());
+  }
+
+  /** Local calendar date YYYY-MM-DD (avoids UTC “not today” false alarm) */
+  function localDateKey(d) {
+    const x = (d instanceof Date) ? d : new Date(d);
+    if (isNaN(x.getTime())) return '';
+    return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0');
   }
 
   function formatDisplayDate(iso) {
@@ -117,8 +123,8 @@
         '</div>' +
         '<p class="conn-muted" style="font-size:0.8rem;margin-top:0.5rem">Tip: Stay online, wait for the page to finish loading, then save once. You should see a resource count after a successful save.</p>';
     } else {
-      const savedDay = meta.at ? meta.at.slice(0, 10) : null;
-      const outdated = !savedDay || savedDay !== todayKey();
+      const savedDay = meta.at ? localDateKey(meta.at) : null;
+      const outdated = !!(meta.at && savedDay && savedDay !== todayKey());
       body.innerHTML =
         '<p class="conn-state offline"><span class="conn-dot"></span> <strong>Offline</strong></p>' +
         '<p>Using the <strong>same</strong> saved copy of resources' +
