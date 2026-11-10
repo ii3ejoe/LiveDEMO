@@ -1,9 +1,9 @@
 {
-  "name": "Iowa Neighbor LiveDemo",
+  "name": "Iowa Neighbor",
   "short_name": "IA Neighbor",
-  "description": "Live demo \u2014 find community resources in Iowa. Sample data for concept display.",
-  "start_url": "/",
-  "scope": "/",
+  "description": "Find community resources in Iowa. Offline-friendly.",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0d9488",
   "theme_color": "#0d9488",

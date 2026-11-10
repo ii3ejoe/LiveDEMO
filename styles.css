@@ -1466,3 +1466,57 @@ body.page-inner .page-eyebrow {
   .hero h1 { max-width: 100%; }
   .hero-content { max-width: 100%; padding-left: 1rem; padding-right: 1rem; }
 }
+
+.pwa-steps { margin: 0.5rem 0 0.75rem 1.2rem; padding: 0; color: #334155; font-size: 0.9rem; line-height: 1.45; }
+.pwa-steps li { margin-bottom: 0.35rem; }
+.pwa-ok { color: #15803d; }
+.pwa-hint { margin: 0.75rem 0 0; padding: 0.65rem 0.75rem; background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 10px; font-size: 0.85rem; color: #115e59; }
+.pwa-install-pop { max-width: min(100vw - 1.25rem, 22rem) !important; box-sizing: border-box; }
+
+/* Mobile resource cards: full width, stack like detail panel, scroll vertically */
+@media (max-width: 720px) {
+  .results-list { width: 100%; max-width: 100%; padding: 0 0.75rem; box-sizing: border-box; }
+  .resource-card {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    gap: 0.65rem;
+    padding: 1rem !important;
+  }
+  .resource-card .card-thumb {
+    width: 64px;
+    height: 64px;
+  }
+  .resource-card .card-body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .resource-card .card-body h3 {
+    font-size: 1.15rem;
+    line-height: 1.3;
+    max-width: none !important;
+    white-space: normal;
+  }
+  .resource-card .card-meta span {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .resource-card .card-side {
+    width: 100%;
+    max-width: 100%;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 0.65rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  .resource-card .card-side .confidence { width: 100%; }
+  .resource-card .view-details { align-self: flex-start; }
+  /* top row: thumb + tags/status */
+  .resource-card .card-thumb { align-self: flex-start; }
+}
