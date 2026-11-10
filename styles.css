@@ -1130,10 +1130,13 @@ html {
   row-gap: 0.5rem;
 }
 .logo-text .brand {
-  max-width: min(52vw, 14rem);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--slate-900);
   white-space: nowrap;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
 }
 .header-actions {
   flex-wrap: wrap;
@@ -1347,3 +1350,80 @@ a.btn:hover,
 }
 /* When actions moved to strip, hide empty duplicate in inner if any */
 .header-inner > .header-actions:empty { display: none; }
+
+/* —— Layout fixes (mobile + detail overflow) —— */
+html, body { max-width: 100%; overflow-x: hidden; }
+.site-header, .header-inner, .header-top-strip { max-width: 100%; box-sizing: border-box; }
+.logo-text .brand {
+  white-space: nowrap;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+  font-size: clamp(0.75rem, 2.5vw, 1.05rem);
+}
+.detail-modal { overflow-x: hidden; }
+.detail-panel {
+  width: min(560px, 100vw - 1rem) !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  padding: 1.25rem 1rem 1.25rem !important;
+}
+.detail-panel img, .detail-panel .detail-map, .detail-panel iframe {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+.detail-actions { flex-wrap: wrap; }
+.results-layout { min-width: 0; }
+.results-list { min-width: 0; max-width: 100%; }
+.resource-card { max-width: 100%; box-sizing: border-box; overflow: hidden; }
+.results-sidebar { max-width: 100%; }
+#map, .map-panel { max-width: 100%; }
+/* Thin divider under category / trust strip */
+.trust-strip, .category-grid { border-bottom: none; }
+/* A2HS / install dialog */
+.a2hs-dialog, .pwa-install-modal, #a2hs-prompt {
+  max-width: min(100vw - 1.5rem, 22rem) !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%);
+}
+@media (max-width: 720px) {
+  .results-layout { display: flex; flex-direction: column; }
+  .results-sidebar { order: -1; position: relative; top: 0; }
+  .results-list { order: 1; }
+  .header-top-strip { padding-left: 0.75rem; padding-right: 0.75rem; }
+}
+
+/* Inner pages — match site theme */
+body.page-inner {
+  background: #f1f5f9;
+  min-height: 100vh;
+}
+body.page-inner .page-main,
+body.page-inner .faq-wrap,
+body.page-inner .fb-wrap,
+body.page-inner .admin-wrap {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+body.page-inner .page-card,
+body.page-inner .fb-card,
+body.page-inner .about-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+  padding: 1.35rem 1.35rem 1.5rem;
+}
+body.page-inner .page-eyebrow {
+  color: #0d9488;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 0.35rem;
+}

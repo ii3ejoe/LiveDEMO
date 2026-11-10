@@ -115,7 +115,10 @@ function readSavedOfflineResources() {
   try {
     const raw = localStorage.getItem('in_offline_bundle');
     const parsed = raw ? JSON.parse(raw) : null;
-    return (parsed && Array.isArray(parsed.resources)) ? parsed.resources : [];
+    if (!parsed) return [];
+    if (Array.isArray(parsed)) return parsed;
+    if (Array.isArray(parsed.resources)) return parsed.resources;
+    return [];
   } catch (err) {
     return [];
   }
